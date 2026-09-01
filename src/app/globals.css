@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * FlowGraph AI — design tokens
+ * Warm ivory paper, clay accent, quiet slate ink. Minimal + technical.
+ * ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: light;
+
+  --paper: #f6f4f0;
+  --surface: #fffefc;
+  --surface-2: #f1eee9;
+  --surface-3: #eae6df;
+  --line: #e2ddd4;
+  --line-strong: #d2ccc1;
+
+  --ink: #1c1b19;
+  --ink-2: #57534c;
+  --ink-3: #8a857c;
+
+  --clay: #bf5b3c;
+  --clay-soft: #f4e5de;
+  --clay-ink: #9c4529;
+
+  --pos: #2f6b52;
+  --pos-soft: #e2eee8;
+  --neg: #ad3f2c;
+  --neg-soft: #f6e3df;
+  --warn: #9a712c;
+  --warn-soft: #f6ecd9;
+  --info: #3f6076;
+  --info-soft: #e3ebf1;
+
+  --grid: rgba(28, 27, 25, 0.045);
+
+  /* Categorical series — validated with dataviz/scripts/validate_palette.js
+     against surface #fffefc (light) and #1e1d18 (dark). Fixed order, never
+     cycled: 1 agent, 2 simulated baseline, 3 SMH, 4 QQQ. */
+  --series-1: #c2562f;
+  --series-2: #008a6e;
+  --series-3: #6a55c9;
+  --series-4: #93780a;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #16150f;
+  --surface: #1e1d18;
+  --surface-2: #262520;
+  --surface-3: #2f2e28;
+  --line: #33322b;
+  --line-strong: #464439;
+
+  --ink: #f0ece3;
+  --ink-2: #a9a498;
+  --ink-3: #7a766c;
+
+  --clay: #d97757;
+  --clay-soft: #3a251c;
+  --clay-ink: #e79274;
+
+  --pos: #64b490;
+  --pos-soft: #1c2f26;
+  --neg: #dd7a63;
+  --neg-soft: #33201b;
+  --warn: #d2a558;
+  --warn-soft: #2f2718;
+  --info: #7ea6c2;
+  --info-soft: #1c262e;
+
+  --grid: rgba(240, 236, 227, 0.05);
+
+  --series-1: #d1673d;
+  --series-2: #159c7d;
+  --series-3: #8878e0;
+  --series-4: #ab8f18;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-clay: var(--clay);
+  --color-clay-soft: var(--clay-soft);
+  --color-clay-ink: var(--clay-ink);
+  --color-pos: var(--pos);
+  --color-pos-soft: var(--pos-soft);
+  --color-neg: var(--neg);
+  --color-neg-soft: var(--neg-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-series-4: var(--series-4);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-newsreader);
+}
+
+* {
+  border-color: var(--line);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "cv11", "ss01";
+}
+
+/* Numbers should never jitter in a trading UI. */
+.tnum {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.display {
+  font-family: var(--font-newsreader), ui-serif, Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.eyebrow {
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+.hairline {
+  background-image: linear-gradient(
+    to right,
+    var(--line) 0 4px,
+    transparent 4px 8px
+  );
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+  height: 1px;
+}
+
+.grid-paper {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+::selection {
+  background: var(--clay-soft);
+  color: var(--clay-ink);
+}
+
+/* Restrained, thin scrollbars — this is a dense data tool. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes fg-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.pulse-dot {
+  animation: fg-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes fg-dash {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+.flow-dash {
+  stroke-dasharray: 4 8;
+  animation: fg-dash 1.4s linear infinite;
+}
+
+@keyframes fg-rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: fg-rise 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot,
+  .flow-dash,
+  .rise {
+    animation: none;
+  }
+}
